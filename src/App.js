@@ -25,11 +25,13 @@ const colRef=collection(db,"books");
 
 function App() {
   const [postsL,setPost] =useState([]);
+  const [postData,setPostData]=useState("");
+  const [click,setClick]=useState(false);
  let postsA=[]
 useEffect(()=>{
 
   setPost([]);
- 
+
   getDocs(colRef).then((snpashot)=>{
     snpashot.docs.map((doc)=>{
     setPost(old=>[...old,{...doc.data(),id:doc.id}]);
@@ -39,26 +41,27 @@ useEffect(()=>{
   })
 
 }
-,[])
+,[click])
  
   return (
-    
     <div className="App">
     <div className='left'>
-
     {postsL.map((post,i)=>{
-   
      return (<div key={i} className="postDiv">
        <h1>{post.title}</h1>
 
        <p>{post.post}</p>
       <h2>@{post.author}</h2>
+      <button >delete post</button>
        </div>)
   
     })}
     </div>
     <div className='right'>
-     hello
+     <input name="post"  onChange={(e)=>{setPostData(e.target.value)}} >
+
+     </input>
+     <button onClick={()=>{addDoc(colRef,{title:"omaran2",author:"omaran2",post:postData});setClick(old=>!old)}}>add</button>
     </div>
     </div>
   );
