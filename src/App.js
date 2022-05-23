@@ -32,7 +32,7 @@ useEffect(()=>{
  
   getDocs(colRef).then((snpashot)=>{
     snpashot.docs.map((doc)=>{
-    setPost([...postsL,{id:doc.id}]);
+    setPost(old=>[...old,{...doc.data(),id:doc.id}]);
     })
   }).catch(err=>{
     console.log(err);
@@ -48,12 +48,17 @@ useEffect(()=>{
 
     {postsL.map((post,i)=>{
    
-     return <div key={i}>{post.id}</div>
+     return (<div key={i} className="postDiv">
+       <h1>{post.title}</h1>
+
+       <p>{post.post}</p>
+      <h2>@{post.author}</h2>
+       </div>)
   
     })}
     </div>
     <div className='right'>
-     helooo
+     hello
     </div>
     </div>
   );
