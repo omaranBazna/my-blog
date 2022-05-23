@@ -6,7 +6,7 @@ import {
   collection, getDocs, onSnapshot,
   addDoc
 } from 'firebase/firestore';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
 
 const firebaseConfig = {
@@ -20,20 +20,41 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db=getFirestore();
 const colRef=collection(db,"books");
-getDocs(colRef).then((snpashot)=>{
-  snpashot.docs.map((doc)=>{
-   console.log({...doc.data(),id:doc.id});
-  })
-}).catch(err=>{
-  console.log(err);
-})
+
+
+
 function App() {
-  const [bookData,setBook]=useState("omaran");
+  const [postsL,setPost] =useState([]);
+ let postsA=[]
+useEffect(()=>{
+
+  setPost([]);
+ 
+  getDocs(colRef).then((snpashot)=>{
+    snpashot.docs.map((doc)=>{
+    setPost([...postsL,{id:doc.id}]);
+    })
+  }).catch(err=>{
+    console.log(err);
+  })
+
+}
+,[])
+ 
   return (
     
     <div className="App">
-      <input name="book" onChange={()=>setBook(this.value)}></input>
-      <button onClick={()=>{addDoc(colRef,{title:"omaran2",author:"omaran2"})}}></button>
+    <div className='left'>
+
+    {postsL.map((post,i)=>{
+   
+     return <div key={i}>{post.id}</div>
+  
+    })}
+    </div>
+    <div className='right'>
+     helooo
+    </div>
     </div>
   );
 
