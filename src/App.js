@@ -3,8 +3,10 @@ import './App.css';
 import { initializeApp } from "firebase/app";
 import {
   getFirestore,
-  collection, getDocs, onSnapshot
+  collection, getDocs, onSnapshot,
+  addDoc
 } from 'firebase/firestore';
+import { useState } from 'react';
 
 
 const firebaseConfig = {
@@ -26,11 +28,15 @@ getDocs(colRef).then((snpashot)=>{
   console.log(err);
 })
 function App() {
+  const [bookData,setBook]=useState("omaran");
   return (
+    
     <div className="App">
-     
+      <input name="book" onChange={()=>setBook(this.value)}></input>
+      <button onClick={()=>{addDoc(colRef,{title:"omaran2",author:"omaran2"})}}></button>
     </div>
   );
+
 }
 
 export default App;
