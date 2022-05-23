@@ -3,8 +3,8 @@ import './App.css';
 import { initializeApp } from "firebase/app";
 import {
   getFirestore,
-  collection, getDocs, onSnapshot,
-  addDoc
+  collection,DocumentChange, getDocs, onSnapshot,
+  addDoc,deleteDoc,doc
 } from 'firebase/firestore';
 import { useState,useEffect } from 'react';
 
@@ -28,20 +28,25 @@ function App() {
   const [postData,setPostData]=useState("");
   const [click,setClick]=useState(false);
  let postsA=[]
-useEffect(()=>{
 
-  setPost([]);
 
-  getDocs(colRef).then((snpashot)=>{
-    snpashot.docs.map((doc)=>{
-    setPost(old=>[...old,{...doc.data(),id:doc.id}]);
-    })
-  }).catch(err=>{
-    console.log(err);
-  })
-
-}
-,[click])
+useEffect( () => {
+  let newData=[]
+  onSnapshot(colRef,(snapshot)=>{
+   
+    snapshot.docs.map((doc)=>{
+   
+       newData.push({...doc.data(),id:doc.id})
+      
+ 
+      })
+      setPost(newData);
+    }
+   
+  )
+ 
+ 
+  },  [click])
  
   return (
     <div className="App">
@@ -51,8 +56,8 @@ useEffect(()=>{
        <h1>{post.title}</h1>
 
        <p>{post.post}</p>
-      <h2>@{post.author}</h2>
-      <button >delete post</button>
+       <h2>@{post.author}</h2>
+       <button onClick={()=>{let ref=doc(db,"books",post.id);deleteDoc(ref);setClick(old=>!old)}}>delete post</button>
        </div>)
   
     })}
